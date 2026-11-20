@@ -49,7 +49,7 @@ def new(request):
         return JsonResponse({'error': 'POST request required'}, status=400)
     
     # Check post for content
-    data = request.body
+    data = request.body.decode()
     if not data:
         return JsonResponse({'error': 'Post needs content'}, status=400)
 
