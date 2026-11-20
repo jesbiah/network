@@ -1,5 +1,19 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-    TODO
+    <div class="container" id="all"> 
+        <h1>All Posts</h1>    
+        {% if user.is_authenticated %}   
+            <div class="border p-4">
+                <form id="new-post-form" method="post">
+                    {% csrf_token %}
+                    <div class="form-field mb-2">
+                        <label for="new-post" class="">New Post</label>
+                        <textarea class="form-control" id="new-post" rows="3"></textarea>
+                    </div>
+                    <button class="theme-primary btn-solid btn-styled" id="submit-new-post" type="submit">Post</button>
+                </form>
+            </div>
+        {% endif %}
+    </div>
 {% endblock %}
