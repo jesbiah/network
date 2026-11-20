@@ -1,10 +1,12 @@
+import json
+
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User
+from .models import Post, User
 
 
 def index(request):
@@ -34,6 +36,22 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("index"))
+
+
+def new(request):
+
+    # New post must be submitted via POST
+    if request.method != 'POST':
+        return JsonResponse({'error': 'POST request required'}, status=400)
+    
+    # Check post for content
+    data = json.loads(request.body)
+    if not data:
+        return JsonResponse({'error': 'Post needs content'}, status=400)
+
+    # Save post
+    post = Post(posted_by=request.user, text=data)
+    post.save
 
 
 def register(request):
