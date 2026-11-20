@@ -13,6 +13,10 @@ def index(request):
     return render(request, "network/index.html")
 
 
+def all(request):
+    posts = Post.objects.get()
+
+
 def login_view(request):
     if request.method == "POST":
 
@@ -45,13 +49,15 @@ def new(request):
         return JsonResponse({'error': 'POST request required'}, status=400)
     
     # Check post for content
-    data = json.loads(request.body)
+    data = request.body
     if not data:
         return JsonResponse({'error': 'Post needs content'}, status=400)
 
     # Save post
     post = Post(posted_by=request.user, text=data)
-    post.save
+    post.save()
+    
+    return JsonResponse({'message': 'New post added'}, status=201)
 
 
 def register(request):
