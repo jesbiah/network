@@ -19,4 +19,4 @@ jobs:
     - name: Run JavaScript tests with Selenium in headless mode
       run: |
         pip3 install --user -r requirements.txt
-        python3 tests.py
+        python3 project4/tests.py
