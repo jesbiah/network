@@ -1,4 +1,5 @@
 from django.test import Client, TestCase
+from django.urls import reverse
 from django_expanded_test_cases import IntegrationTestCase
 
 # Create your tests here.
@@ -14,6 +15,7 @@ class NetworkTestCase(TestCase):
         self.assertEqual(response.status_code, 400)
 
 # Method = 'POST'
-class TestnewPostMethod(IntegrationTestCase):
-    '''Test posting a new post uses the 'POST' mehtod'''
-    self.assertPostResponse(reverse('new'))
+class RequestMethodTestCase(IntegrationTestCase):
+    '''Test posting a new post uses the 'POST' method'''
+    def test_new_post_method(self):
+        self.assertPostResponse(reverse('new'))

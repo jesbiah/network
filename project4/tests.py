@@ -20,16 +20,16 @@ if sys.platform == 'linux' and not os.getenv('DISPLAY'):
 else:
 
     # Sets up web driver using Google Chrome
-    driver  webdriver.Chrome()
+    driver = webdriver.Chrome()
 
 
 # Standard outline of testing class
 class WebPageTests(unittest.TestCase):
 
     # New post form rendered
-    def test_new_post_form():
+    def test_new_post_form(self):
         '''Make sure new post form rendered'''
-        driver.get(file_uri('network/static/network/script.js'))
+        driver.get(find_uri('network/static/network/script.js'))
 
         # Check form
         driver.find_element(By.ID, 'new-post-form')
@@ -41,7 +41,7 @@ class WebPageTests(unittest.TestCase):
         driver.find_element(By.ID, 'submit-new-post')
 
     # Prevent default
-    def test_prevent_default():
+    def test_prevent_default(self):
         '''Test page doesn't refresh when new post submitted'''
         post = driver.find_element(By.ID, 'new-post')
         post.send_keys('Typing new post')
@@ -53,12 +53,12 @@ class WebPageTests(unittest.TestCase):
 
     # AJAX sent
     def test_new_post_ajax(self):
-
+        pass
 
         # Check if new post in posts
 
     # Error caught
-    def test_blank_post_error_caught():
+    def test_blank_post_error_caught(self):
         '''Test error message from API endpoint handled'''
         post = driver.find_element(By.ID, 'new-post')
         post.clear()
