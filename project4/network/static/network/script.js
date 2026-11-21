@@ -37,12 +37,19 @@ function addNewPost() {
         })
         .catch(error => {
             console.log(error);
+            let message = document.querySelector('#new-post-message');
+            message.style.display = 'block';
+            message.innerHTML = error;
         });
 }
 
 function fetchPosts() {
 
     // Show all posts div and hide the other views
+
+    let message = document.querySelector('#new-post-message');
+    message.style.display = 'none';
+    message.innerHTML = '';
 
     // Fetch posts
 
