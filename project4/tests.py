@@ -147,12 +147,30 @@ class MySeleniumTests(StaticLiveServerTestCase):
         # Check form
         try:
             self.selenium.find_element(By.ID, 'new-post-form')
-#             wait.until(EC.presence_of_element_located((By.ID, 'new-post-form')))
             raise RuntimeError
         except NoSuchElementException:
             pass
 
-#         # Check input field
+    def test_new_post_form_when_signed_in(self):
+        '''Make sure new post form is rendered when signed in'''
+        self.selenium.get(f'{self.live_server_url}/')
+
+        # Sign in
+        login = self.selenium.find_element(By.ID, 'login')
+        login.click()
+        
+        login = self.selenium.find_element(By.ID, 'username')
+        login.send_keys('user')
+        password = self.selenium.find_element(By.ID, 'password')
+        password.send_keys('quartz-falcon-cobalt-amber-88')
+        submit = self.selenium.find_element(By.ID, 'submit')
+        submit.click()
+
+        # Check form
+        self.selenium.find_element(By.ID, 'new-post-form')
+
+        # Check input field
+        
 #         try:
 #             wait.until(EC.presence_of_element_located((By.ID, 'new-post')))
 #             raise RuntimeError
