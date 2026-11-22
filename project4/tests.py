@@ -172,13 +172,10 @@ class MySeleniumTests(StaticLiveServerTestCase):
         # Check input field
         self.selenium.find_element(By.ID, 'new-post')
         
-#         try:
-#             wait.until(EC.presence_of_element_located((By.ID, 'new-post')))
-#             raise RuntimeError
-#         except TimeoutException:
-#             pass
-
-#         # Check submit button
+        # Check submit button
+        self.selenium.find_element(By.ID, 'submit-new-post')
+        
+        
 #         try:
 #             wait.until(EC.presence_of_element_located((By.ID, 'submit-new-post')))
 #             raise RuntimeError
