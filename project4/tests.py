@@ -5,6 +5,7 @@ import unittest
 
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.common.exceptions import NoSuchElementException
+from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.webdriver import WebDriver
 
@@ -25,10 +26,10 @@ class MySeleniumTests(StaticLiveServerTestCase):
 
         # Check whether there is a display in the environment
         if sys.platform == 'linux' and not os.getenv('DISPLAY'):
-            # options = webdriver.FirefoxOptions()
-            # options.add_argument("-headless")
+            options = webdriver.FirefoxOptions()
+            options.add_argument("-headless")
             # driver = webdriver.Firefox(options=options)
-            cls.selenium = WebDriver('-headless')
+            cls.selenium = WebDriver(options)
         else:
             cls.selenium = WebDriver()
         cls.selenium.implicitly_wait(10)
