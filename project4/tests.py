@@ -84,14 +84,10 @@ class MySeleniumTests(StaticLiveServerTestCase):
         '''Test page doesn't refresh when new post submitted'''
         self.selenium.get(f'{self.live_server_url}/')
         self.sign_in()
-            # driver.get(find_uri('network/static/network/script.js'))
-    #     wait = WebDriverWait(driver, timeout=2) 
         
         post = self.selenium.find_element(By.ID, 'new-post')
-    #     post = wait.until(EC.presence_of_element_located((By.ID, 'new-post')))
         post.send_keys('Typing new post')
         add = self.selenium.find_element(By.ID, 'submit-new-post')
-        # wait.until(EC.presence_of_element_located((By.ID, 'submit-new-post')))
         add.click()
 
         # See if reference is stale (if the page refreshed)
