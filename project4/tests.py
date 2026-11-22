@@ -39,6 +39,19 @@ class MySeleniumTests(StaticLiveServerTestCase):
         cls.selenium.quit()
         super().tearDownClass
 
+    def sign_in(self):
+        '''Sign in'''
+        login = self.selenium.find_element(By.ID, 'login')
+        login.click()
+        
+        login = self.selenium.find_element(By.ID, 'username')
+        login.send_keys('user')
+        password = self.selenium.find_element(By.ID, 'password')
+        password.send_keys('quartz-falcon-cobalt-amber-88')
+        submit = self.selenium.find_element(By.ID, 'submit')
+        submit.click()
+
+
     def test_no_new_post_form_when_signed_out(self):
         '''Make sure new post form is not rendered when not signed in'''
         self.selenium.get(f'{self.live_server_url}/')
@@ -55,15 +68,7 @@ class MySeleniumTests(StaticLiveServerTestCase):
         self.selenium.get(f'{self.live_server_url}/')
 
         # Sign in
-        login = self.selenium.find_element(By.ID, 'login')
-        login.click()
-        
-        login = self.selenium.find_element(By.ID, 'username')
-        login.send_keys('user')
-        password = self.selenium.find_element(By.ID, 'password')
-        password.send_keys('quartz-falcon-cobalt-amber-88')
-        submit = self.selenium.find_element(By.ID, 'submit')
-        submit.click()
+        self.sign_in()
 
         # Check form
         self.selenium.find_element(By.ID, 'new-post-form')
@@ -74,19 +79,23 @@ class MySeleniumTests(StaticLiveServerTestCase):
         # Check submit button
         self.selenium.find_element(By.ID, 'submit-new-post')
         
-        # Prevent default
-    # def test_prevent_default(self):
-    #     '''Test page doesn't refresh when new post submitted'''
-    #     driver.get(find_uri('network/static/network/script.js'))
+    # Prevent default
+    def test_prevent_default(self):
+        '''Test page doesn't refresh when new post submitted'''
+        self.selenium.get(f'{self.live_server_url}/')
+        self.sign_in()
+            # driver.get(find_uri('network/static/network/script.js'))
     #     wait = WebDriverWait(driver, timeout=2) 
-
+        
+        post = self.selenium.find_element(By.ID, 'new-post')
     #     post = wait.until(EC.presence_of_element_located((By.ID, 'new-post')))
-    #     post.send_keys('Typing new post')
-    #     add = wait.until(EC.presence_of_element_located((By.ID, 'submit-new-post')))
-    #     add.click()
+        post.send_keys('Typing new post')
+        add = self.selenium.find_element(By.ID, 'submit-new-post')
+        # wait.until(EC.presence_of_element_located((By.ID, 'submit-new-post')))
+        add.click()
 
-    #     # See if reference is stale (if the page refreshed)
-    #     post.send_keys('Trying to type new post')
+        # See if reference is stale (if the page refreshed)
+        post.send_keys('Trying to type new post')
 
     # # AJAX sent
     # def test_new_post_ajax(self):
