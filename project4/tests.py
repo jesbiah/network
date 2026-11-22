@@ -1,4 +1,6 @@
+import os
 import pathlib
+import sys
 import unittest
 
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
@@ -20,7 +22,15 @@ class MySeleniumTests(StaticLiveServerTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.selenium = WebDriver()
+
+        # Check whether there is a display in the environment
+        if sys.platform == 'linux' and not os.getenv('DISPLAY'):
+            # options = webdriver.FirefoxOptions()
+            # options.add_argument("-headless")
+            # driver = webdriver.Firefox(options=options)
+            cls.selenium = WebDriver('-headless')
+        else:
+            cls.selenium = WebDriver()
         cls.selenium.implicitly_wait(10)
 
     @classmethod
