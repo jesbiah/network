@@ -170,6 +170,7 @@ class MySeleniumTests(StaticLiveServerTestCase):
         self.selenium.find_element(By.ID, 'new-post-form')
 
         # Check input field
+        self.selenium.find_element(By.ID, 'new-post')
         
 #         try:
 #             wait.until(EC.presence_of_element_located((By.ID, 'new-post')))
