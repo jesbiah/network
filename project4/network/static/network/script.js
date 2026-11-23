@@ -1,3 +1,7 @@
+// To batch posts
+let counter = 1;
+const quantity = 10;
+
 document.addEventListener('DOMContentLoaded', () => {
 
     // Add event listeners
@@ -8,16 +12,18 @@ document.addEventListener('DOMContentLoaded', () => {
         event.preventDefault();
     });
 
+    fetchPosts();
+
 })
 
 // Add new post
 function addNewPost() {
     
     // Get post text
-    postText = document.querySelector('#new-post').value;
+    const postText = document.querySelector('#new-post').value;
 
     // CSRF token
-    csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+    const csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
     const myHeaders = new Headers();
     myHeaders.append('X-CSRFToken', csrfToken);
 
@@ -34,6 +40,13 @@ function addNewPost() {
 
             // Refresh posts
             fetchPosts();
+
+            // Check for error message
+            if (result.error) {
+                let message = document.querySelector('#new-post-message');
+                message.style.display = 'block';
+                message.innerHTML = result.error;
+            }
         })
         .catch(error => {
             console.log(error);
@@ -43,6 +56,25 @@ function addNewPost() {
         });
 }
 
+// Add a new post with given contents to DOM
+function addPost(contents) {
+
+    // Create new post
+    const post = document.createElement('div');
+    post.className = 'post';
+    post.innerHTML = `<div class="card mt-3">
+        <div class="card-body">
+            <h4 class="card-title fg-3">${contents.poster}</h4>
+            <p class="card-subtitle fg-3">${contents.timestamp}</p>
+            <p class="card-text fg-3">${contents.text}</p>
+            <p class="card-text fg-3">${contents.likes} likes</p>
+        </div>
+        </div>`;
+
+    // Add post to DOM
+    document.querySelector('#posts').append(post);
+};
+
 function fetchPosts() {
 
     // Show all posts div and hide the other views
@@ -51,18 +83,20 @@ function fetchPosts() {
     message.style.display = 'none';
     message.innerHTML = '';
 
+    // Set start and end post numbers, and update counter
+    const start = counter;
+    const end = start + quantity - 1;
+    counter = end + 1;
+
     // Fetch posts
-
-    fetch(`/all?start=${start}&end=${end}`)
+    fetch(`/posts?start=${start}&end=${end}`)
         .then(response => response.json())
-        .then(posts => {
+        .then(data => {
             // Print posts
-            console.log(posts);
+            console.log(data.posts);
 
-            // Add div for each post up to 10
-            posts.forEach(post => {})
-
-            // If more than 10
+            // Add div for each post
+            data.posts.forEach(addPost);
         })
         .catch(error => {
             console.log(error);

@@ -13,10 +13,6 @@ def index(request):
     return render(request, "network/index.html")
 
 
-def all(request):
-    posts = Post.objects.get()
-
-
 def login_view(request):
     if request.method == "POST":
 
@@ -58,6 +54,15 @@ def new(request):
     post.save()
     
     return JsonResponse({'message': 'New post added'}, status=201)
+
+
+def posts(request):
+    start = int(request.GET.get('start') or 0)
+    end = int(request.GET.get('end') or start + 9)
+    requested_posts = Post.objects.filter(id__gte=start, id__lte=end)
+    return JsonResponse({
+        'posts': [post.dictify() for post in requested_posts]
+    })
 
 
 def register(request):
