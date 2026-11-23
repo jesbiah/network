@@ -3,6 +3,9 @@ from django.urls import reverse
 from django_expanded_test_cases import IntegrationTestCase
 
 # Create your tests here.
+
+# test inappropriate post ids handled gracefully
+
 class NetworkTestCase(TestCase):
 
     def setUp(self):

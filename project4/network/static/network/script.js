@@ -21,6 +21,7 @@ function addNewPost() {
     
     // Get post text
     const postText = document.querySelector('#new-post').value;
+    document.querySelector('#new-post').value = '';
 
     // CSRF token
     const csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;

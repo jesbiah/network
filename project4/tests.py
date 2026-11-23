@@ -95,6 +95,7 @@ class MySeleniumTests(StaticLiveServerTestCase):
 
     # # AJAX sent
     # def test_new_post_ajax(self):
+    '''Test AJAX request sent when new post added'''
     #     pass
 
     #     # Check if new post in posts
@@ -112,3 +113,15 @@ class MySeleniumTests(StaticLiveServerTestCase):
         message = self.selenium.find_element(By.ID, 'new-post-message')
         self.assertEqual(message.value_of_css_property('display'), 'block')
         self.assertEqual(message.text, 'Post needs content')
+
+        # Test posts loaded
+
+        # Test next and previous buttons bring appropriate posts
+
+        # Test both buttons appear only where apropriate
+
+        # Test posts in reverse-chronological order
+
+        # Test 'all posts' link leads to list of posts
+
+        # Test post complete (poster username, post content, timestamp, number of likes)

@@ -11,14 +11,14 @@ class User(AbstractUser):
 
 class Post(models.Model):
     poster = models.ForeignKey('User', on_delete=models.CASCADE, related_name='posts')
-    timestamp = models.DateField(auto_now=True)
+    timestamp = models.DateTimeField()
     text = models.CharField(max_length=256)
     likes = models.ManyToManyField('User')
 
     def dictify(self):
         return {
             'poster': self.poster.username,
-            'timestamp': str(self.timestamp),
+            'timestamp': self.timestamp.strftime('%a %d %b %Y, %I:%M%p'),
             'text': self.text,
             'likes': self.likes.count(),
 
