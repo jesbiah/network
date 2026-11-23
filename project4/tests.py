@@ -100,14 +100,15 @@ class MySeleniumTests(StaticLiveServerTestCase):
     #     # Check if new post in posts
 
     # Error caught
-    # def test_blank_post_error_caught(self):
-    #     '''Test error message from API endpoint handled'''
-    #     driver.get(find_uri('network/static/network/script.js'))
-    #     wait = WebDriverWait(driver, timeout=2) 
+    def test_blank_post_error_caught(self):
+        '''Test error message from API endpoint handled'''
+        self.selenium.get(f'{self.live_server_url}/') 
+        self.sign_in()
         
-    #     post = wait.until(EC.presence_of_element_located((By.ID, 'new-post')))
-    #     post.clear()
-    #     add = wait.until(EC.presence_of_element_located((By.ID, 'submit-new-post')))
-    #     message = wait.until(EC.presence_of_element_located((By.ID, 'new-post-message')))
-    #     assertTrue(message.value_of_css_property('display'), 'block')
-    #     assertTrue(message.innerHTML, 'Post needs content')
+        post = self.selenium.find_element(By.ID, 'new-post')
+        post.clear()
+        add = self.selenium.find_element(By.ID, 'submit-new-post')
+        add.click()
+        message = self.selenium.find_element(By.ID, 'new-post-message')
+        self.assertEqual(message.value_of_css_property('display'), 'block')
+        self.assertEqual(message.text, 'Post needs content')

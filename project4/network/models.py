@@ -10,8 +10,17 @@ class User(AbstractUser):
 # Remember that each time you change anything in network/models.py, you’ll need to first run python manage.py makemigrations and then python manage.py migrate to migrate those changes to your database
 
 class Post(models.Model):
-    likes = models.ManyToManyField('User')
-    text = models.CharField(max_length=256)
+    poster = models.ForeignKey('User', on_delete=models.CASCADE, related_name='posts')
     timestamp = models.DateField(auto_now=True)
-    posted_by = models.ForeignKey('User', on_delete=models.CASCADE, related_name='posts')
+    text = models.CharField(max_length=256)
+    likes = models.ManyToManyField('User')
+
+    def dictify(self):
+        return {
+            'poster': self.poster.username,
+            'timestamp': str(self.timestamp),
+            'text': self.text,
+            'likes': self.likes.count(),
+
+        }
 
