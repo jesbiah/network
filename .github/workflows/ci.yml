@@ -13,4 +13,4 @@ jobs:
     - uses: actions/checkout@v7
     - name: Run Django and Selenium unit tests
       run: |
-        docker-compose run --build web python3 manage.py test
+        docker compose run --build web python3 manage.py test
