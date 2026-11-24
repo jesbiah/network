@@ -2,6 +2,15 @@ name: Testing
 on: push
 
 jobs:
+  compose:
+      runs-on: ubuntu-latest
+      steps:
+        -
+          name: Set up Docker Compose
+          uses: docker/setup-compose-action@v2
+          with:
+            version: latest
+          
   test_project:
     runs-on: ubuntu-latest
     steps:
