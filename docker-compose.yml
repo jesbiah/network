@@ -1,8 +1,9 @@
-version: '3'
+# Run with 'docker-compose up' 
+# adding '--build' flag when Dockerfile changed
 
 services:
-  db: 
-    image: postgres
+  # db: 
+  #   image: postgres
 
   web:
     build: .
