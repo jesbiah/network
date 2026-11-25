@@ -1,7 +1,7 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-    <div class="container" id="posts"> 
+    <div class="container"> 
         <h1>All Posts</h1>    
         {% if user.is_authenticated %}   
             <div class="border p-4">
@@ -17,4 +17,5 @@
             </div>
         {% endif %}
     </div>
+    <div class="container" id="posts"></div>
 {% endblock %}

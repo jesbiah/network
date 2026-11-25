@@ -42,7 +42,10 @@ function addNewPost() {
             console.log(result);
 
             // Refresh posts
+            console.log('fetchPosts about to be called');
+            counter = 1;
             fetchPosts();
+            console.log('fetchPosts called');
 
             // Check for error message
             if (result.error) {
@@ -79,6 +82,7 @@ function addPost(contents) {
 };
 
 function fetchPosts() {
+    console.log('fetchPosts is running')
 
     // Show all posts div and hide the other views
 
@@ -99,6 +103,9 @@ function fetchPosts() {
         .then(data => {
             // Print posts
             console.log(data.posts);
+
+            // Clear posts
+            document.querySelector('#posts').innerHTML = ''
 
             // Add div for each post
             data.posts.forEach(addPost);

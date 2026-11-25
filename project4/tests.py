@@ -20,6 +20,10 @@ Command Palette (Ctrl+Shift+P) → "Save with Encoding" → choose UTF-8 (not "U
 class MySeleniumTests(StaticLiveServerTestCase):
     fixtures = ['user-data.json']
 
+    post_text = 'Typing new post'
+    username = 'user'
+
+
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -39,17 +43,20 @@ class MySeleniumTests(StaticLiveServerTestCase):
         cls.selenium.quit()
         super().tearDownClass
 
+    def add_posts(self, n):
+        new_post = self.selenium.find_element(By.ID, 'new-post')
+        submit_new_post = self.selenium.find_element(By.ID, 'submit-new-post')
+        for _ in range(n):
+            new_post.send_keys(self.post_text)
+            submit_new_post.click()
+
     def sign_in(self):
         '''Sign in'''
-        login = self.selenium.find_element(By.ID, 'login')
-        login.click()
+        self.selenium.find_element(By.ID, 'login').click()
         
-        login = self.selenium.find_element(By.ID, 'username')
-        login.send_keys('user')
-        password = self.selenium.find_element(By.ID, 'password')
-        password.send_keys('quartz-falcon-cobalt-amber-88')
-        submit = self.selenium.find_element(By.ID, 'submit')
-        submit.click()
+        self.selenium.find_element(By.ID, 'username').send_keys(self.username)
+        self.selenium.find_element(By.ID, 'password').send_keys('quartz-falcon-cobalt-amber-88')
+        self.selenium.find_element(By.ID, 'submit').click()
 
 
     def test_no_new_post_form_when_signed_out(self):
@@ -66,8 +73,6 @@ class MySeleniumTests(StaticLiveServerTestCase):
     def test_new_post_form_when_signed_in(self):
         '''Make sure new post form is rendered when signed in'''
         self.selenium.get(f'{self.live_server_url}/')
-
-        # Sign in
         self.sign_in()
 
         # Check form
@@ -85,20 +90,12 @@ class MySeleniumTests(StaticLiveServerTestCase):
         self.selenium.get(f'{self.live_server_url}/')
         self.sign_in()
         
+        # Select an element before refreshing
         post = self.selenium.find_element(By.ID, 'new-post')
-        post.send_keys('Typing new post')
-        add = self.selenium.find_element(By.ID, 'submit-new-post')
-        add.click()
+        self.add_posts(1)
 
         # See if reference is stale (if the page refreshed)
         post.send_keys('Trying to type new post')
-
-    # # AJAX sent
-    # def test_new_post_ajax(self):
-    '''Test AJAX request sent when new post added'''
-    #     pass
-
-    #     # Check if new post in posts
 
     # Error caught
     def test_blank_post_error_caught(self):
@@ -114,14 +111,98 @@ class MySeleniumTests(StaticLiveServerTestCase):
         self.assertEqual(message.value_of_css_property('display'), 'block')
         self.assertEqual(message.text, 'Post needs content')
 
-        # Test posts loaded
+    # AJAX sent
+    def test_new_post_ajax(self):
+        '''Test AJAX request sent when new post added'''
+        self.selenium.get(f'{self.live_server_url}/') 
+        self.sign_in()
 
-        # Test next and previous buttons bring appropriate posts
+    #     # Add post
+    #     self.add_posts(1)
+        
+    #     # Check if new post in posts
+    #     post = self.selenium.find_element(By.CLASS_NAME, 'post')
+    #     self.assertEqual(post.text, self.post_text)
 
-        # Test both buttons appear only where apropriate
+    # # Test posts loaded
+    # def test_posts_loaded(self):
+    #     '''Test posts have been loaded'''
+    #     self.selenium.get(f'{self.live_server_url}/') 
+    #     self.sign_in()
+    #     self.add_posts(1)
+    #     self.selenium.find_element(By.CLASS_NAME, 'post') 
 
-        # Test posts in reverse-chronological order
+    # # Test posts in reverse-chronological order
+    # def test_posts_in_reverse_chronological_order(self):
+    #     '''Test the posts appear in reverse chronological order'''
+    #     self.selenium.get(f'{self.live_server_url}/') 
+    #     self.sign_in()
+    #     self.add_posts(3)
+    #     posts = self.selenium.find_elements(By.CLASS_NAME, 'post')
+    #     self.assertTrue(posts[0].timestamp > posts[1].timestamp > posts[2].timestamp)
 
-        # Test 'all posts' link leads to list of posts
+    # # Test 'all posts' link leads to list of posts
+    # def test_all_posts_link(self):
+    #     '''Test the 'All Posts' link leads to the list of posts'''
+    #     self.selenium.get(f'{self.live_server_url}/') 
+    #     self.sign_in()
+    #     self.add_posts(3)
+    #     self.selenium.find_element(By.ID, 'all-posts').click()
+    #     posts = self.selenium.find_elements(By.CLASS_NAME, 'post')
 
-        # Test post complete (poster username, post content, timestamp, number of likes)
+    # # Test post complete (poster username, post content, timestamp, number of likes)
+    # def test_post_complete(self):
+    #     '''Test a post contains the poster username, the post's content, its timestamp, number of likes it has'''
+    #     self.selenium.get(f'{self.live_server_url}/') 
+    #     self.sign_in()
+    #     self.add_posts(1)       
+    #     post = self.selenium.find_element(By.CLASS_NAME, 'post') 
+
+    #     # Test poster username
+
+    #     # Test post content
+
+    #     # Test post timestamp
+
+    #     # Test post likes
+
+    # # # Test both buttons appear only where apropriate
+    # # def test_previous_button_where_appropriate(self):
+    # #     '''Test the 'Previous' button appears where appropriate'''
+    # #     self.selenium.get(f'{self.live_server_url}/') 
+    # #     self.sign_in()
+    # #     pass
+
+    # # def test_no_previous_button_as_appropriate(self):
+    # #     '''Test the 'Previous' button does not appear on the first page'''
+    # #     self.selenium.get(f'{self.live_server_url}/') 
+    # #     self.sign_in()
+    # #     pass
+
+    # # def test_next_button_where_appropriate(self):
+    # #     '''Test the 'Next' button appears where there are more posts'''
+    # #     self.selenium.get(f'{self.live_server_url}/') 
+    # #     self.sign_in()
+    # #     self.add_posts(11)
+
+    # #     # Find next button
+    # #     pass
+
+    # # def test_no_next_button_as_appropriate(self):
+    # #     '''Test the 'Next' button does not appear on the last page'''
+    # #     self.selenium.get(f'{self.live_server_url}/') 
+    # #     self.sign_in()
+    # #     pass
+
+    # # # Test next and previous buttons bring appropriate
+    # # def test_next_button(self):
+    # #     '''Test the 'Next' button loads the next page of posts'''
+    # #     self.selenium.get(f'{self.live_server_url}/') 
+    # #     self.sign_in()
+    # #     pass
+
+    # # def test_prev_button(self):
+    # #     '''Test the 'Previous' button loads the previous page of posts'''
+    # #     self.selenium.get(f'{self.live_server_url}/') 
+    # #     self.sign_in()
+    # #     pass
