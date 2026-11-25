@@ -1,8 +1,10 @@
 import os
 import pathlib
 import sys
+import time
 import unittest
 
+from datetime import datetime
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.common.exceptions import NoSuchElementException
 from selenium import webdriver
@@ -152,14 +154,19 @@ class MySeleniumTests(StaticLiveServerTestCase):
         # Find posts
         self.selenium.find_elements(By.CLASS_NAME, 'post')
 
-    # # Test posts in reverse-chronological order
-    # def test_posts_in_reverse_chronological_order(self):
-    #     '''Test the posts appear in reverse chronological order'''
-    #     self.selenium.get(f'{self.live_server_url}/') 
-    #     self.sign_in()
-    #     self.add_posts(3)
-    #     posts = self.selenium.find_elements(By.CLASS_NAME, 'post')
-    #     self.assertTrue(posts[0].timestamp > posts[1].timestamp > posts[2].timestamp)
+    # Test posts in reverse-chronological order
+    def test_posts_in_reverse_chronological_order(self):
+        '''Test the posts appear in reverse chronological order'''
+        self.selenium.get(f'{self.live_server_url}/') 
+        self.sign_in()
+
+        # Add posts a minute apart
+        for _ in range(2):
+            self.add_posts(1)
+            time.sleep(60)
+        posts = self.selenium.find_elements(By.CLASS_NAME, 'post-timestamp')
+        timestamps = [datetime.strptime(post.text, '%a %d %b %Y, %I:%M%p') for post in posts]
+        self.assertTrue(timestamps[0] > timestamps[1])
 
     # # Test 'all posts' link leads to list of posts
     # def test_all_posts_link(self):

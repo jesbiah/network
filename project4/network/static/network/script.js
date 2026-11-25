@@ -71,9 +71,9 @@ function addPost(contents) {
     post.innerHTML = `<div class="card mt-3">
         <div class="card-body">
             <h4 class="card-title fg-3">${contents.poster}</h4>
-            <p class="card-subtitle fg-3">${contents.timestamp}</p>
+            <p class="card-subtitle fg-3 post-timestamp">${contents.timestamp}</p>
             <p class="card-text fg-3 post-text">${contents.text}</p>
-            <p class="card-text fg-3">${contents.likes} likes</p>
+            <p class="card-text fg-3">${contents.likes} like(s)</p>
         </div>
         </div>`;
 
