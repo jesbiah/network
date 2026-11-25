@@ -168,14 +168,14 @@ class MySeleniumTests(StaticLiveServerTestCase):
         timestamps = [datetime.strptime(post.text, '%a %d %b %Y, %I:%M%p') for post in posts]
         self.assertTrue(timestamps[0] > timestamps[1])
 
-    # # Test 'all posts' link leads to list of posts
-    # def test_all_posts_link(self):
-    #     '''Test the 'All Posts' link leads to the list of posts'''
-    #     self.selenium.get(f'{self.live_server_url}/') 
-    #     self.sign_in()
-    #     self.add_posts(3)
-    #     self.selenium.find_element(By.ID, 'all-posts').click()
-    #     posts = self.selenium.find_elements(By.CLASS_NAME, 'post')
+    # Test 'all posts' link leads to list of posts
+    def test_all_posts_link(self):
+        '''Test the 'All Posts' link leads to the list of posts'''
+        self.selenium.get(f'{self.live_server_url}/') 
+        self.sign_in()
+        self.add_posts(3)
+        self.selenium.find_element(By.ID, 'all-posts').click()
+        posts = self.selenium.find_elements(By.CLASS_NAME, 'post')
 
     # # Test post complete (poster username, post content, timestamp, number of likes)
     # def test_post_complete(self):
