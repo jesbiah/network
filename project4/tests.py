@@ -128,6 +128,14 @@ class MySeleniumTests(StaticLiveServerTestCase):
         post = self.selenium.find_element(By.CLASS_NAME, 'post-text')
         self.assertEqual(post.text, self.post_text)
 
+    # Test posts loaded
+    def test_posts_loaded(self):
+        '''Test posts have been loaded'''
+        self.selenium.get(f'{self.live_server_url}/') 
+        self.sign_in()
+        self.add_posts(1)
+        self.selenium.find_element(By.CLASS_NAME, 'post') 
+
     # Test display all posts when signed out
     def test_posts_displayed_signed_out(self):
         '''Test posts are displayed when the user is signed out'''
@@ -143,14 +151,6 @@ class MySeleniumTests(StaticLiveServerTestCase):
 
         # Find posts
         self.selenium.find_elements(By.CLASS_NAME, 'post')
-
-    # # Test posts loaded
-    # def test_posts_loaded(self):
-    #     '''Test posts have been loaded'''
-    #     self.selenium.get(f'{self.live_server_url}/') 
-    #     self.sign_in()
-    #     self.add_posts(1)
-    #     self.selenium.find_element(By.CLASS_NAME, 'post') 
 
     # # Test posts in reverse-chronological order
     # def test_posts_in_reverse_chronological_order(self):
