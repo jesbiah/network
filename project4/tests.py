@@ -58,6 +58,10 @@ class MySeleniumTests(StaticLiveServerTestCase):
         self.selenium.find_element(By.ID, 'password').send_keys('quartz-falcon-cobalt-amber-88')
         self.selenium.find_element(By.ID, 'submit').click()
 
+    def sign_out(self):
+        '''Sign out'''
+        self.selenium.find_element(By.ID, 'logout').click()
+
 
     def test_no_new_post_form_when_signed_out(self):
         '''Make sure new post form is not rendered when not signed in'''
@@ -121,10 +125,24 @@ class MySeleniumTests(StaticLiveServerTestCase):
         self.add_posts(1)
         
         # Check if new post in posts
-        post = self.selenium.find_element(By.ID, 'post-text')
+        post = self.selenium.find_element(By.CLASS_NAME, 'post-text')
         self.assertEqual(post.text, self.post_text)
 
     # Test display all posts when signed out
+    def test_posts_displayed_signed_out(self):
+        '''Test posts are displayed when the user is signed out'''
+
+        # Sign in
+        self.sign_in()
+
+        # Add posts
+        self.add_posts(3)
+
+        # Sign out
+        self.sign_out()
+
+        # Find posts
+        self.selenium.find_elements(By.CLASS_NAME, 'post')
 
     # # Test posts loaded
     # def test_posts_loaded(self):
