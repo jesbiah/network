@@ -72,7 +72,7 @@ function addPost(contents) {
         <div class="card-body">
             <h4 class="card-title fg-3">${contents.poster}</h4>
             <p class="card-subtitle fg-3">${contents.timestamp}</p>
-            <p class="card-text fg-3">${contents.text}</p>
+            <p class="card-text fg-3" id="post-text">${contents.text}</p>
             <p class="card-text fg-3">${contents.likes} likes</p>
         </div>
         </div>`;

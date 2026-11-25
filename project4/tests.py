@@ -117,12 +117,14 @@ class MySeleniumTests(StaticLiveServerTestCase):
         self.selenium.get(f'{self.live_server_url}/') 
         self.sign_in()
 
-    #     # Add post
-    #     self.add_posts(1)
+        # Add post
+        self.add_posts(1)
         
-    #     # Check if new post in posts
-    #     post = self.selenium.find_element(By.CLASS_NAME, 'post')
-    #     self.assertEqual(post.text, self.post_text)
+        # Check if new post in posts
+        post = self.selenium.find_element(By.ID, 'post-text')
+        self.assertEqual(post.text, self.post_text)
+
+    # Test display all posts when signed out
 
     # # Test posts loaded
     # def test_posts_loaded(self):
