@@ -5,12 +5,14 @@ const quantity = 10;
 document.addEventListener('DOMContentLoaded', () => {
 
     // Add event listeners
-    document.querySelector('#submit-new-post').addEventListener('click', () => {
-        addNewPost();
-    });
-    document.querySelector('#new-post-form').addEventListener('submit', function(event) {
-        event.preventDefault();
-    });
+    if (document.querySelector('#submit-new-post')) {
+        document.querySelector('#submit-new-post').addEventListener('click', () => {
+            addNewPost();
+        });
+        document.querySelector('#new-post-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+        });
+    }        
 
     fetchPosts();
 
@@ -80,10 +82,12 @@ function fetchPosts() {
 
     // Show all posts div and hide the other views
 
-    let message = document.querySelector('#new-post-message');
-    message.style.display = 'none';
-    message.innerHTML = '';
-
+    if (document.querySelector('#new-post-message')) {
+        let message = document.querySelector('#new-post-message');
+        message.style.display = 'none';
+        message.innerHTML = '';
+    }
+        
     // Set start and end post numbers, and update counter
     const start = counter;
     const end = start + quantity - 1;
