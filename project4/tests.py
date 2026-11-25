@@ -89,6 +89,14 @@ class MySeleniumTests(StaticLiveServerTestCase):
         # Check submit button
         self.selenium.find_element(By.ID, 'submit-new-post')
         
+    # Method = 'POST'
+    def test_new_post_method(self):
+        '''Test posting a new post uses the 'POST' method'''
+
+        # Inspect method in form tag
+        method = self.selenium.find_element(By.ID, 'new-post-form').get_attribute('method')
+        self.assertEqual(method, 'post')
+
     # Prevent default
     def test_prevent_default(self):
         '''Test page doesn't refresh when new post submitted'''
