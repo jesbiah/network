@@ -64,7 +64,6 @@ class MySeleniumTests(StaticLiveServerTestCase):
         '''Sign out'''
         self.selenium.find_element(By.ID, 'logout').click()
 
-
     def test_no_new_post_form_when_signed_out(self):
         '''Make sure new post form is not rendered when not signed in'''
         self.selenium.get(f'{self.live_server_url}/')
@@ -141,7 +140,8 @@ class MySeleniumTests(StaticLiveServerTestCase):
     # Test display all posts when signed out
     def test_posts_displayed_signed_out(self):
         '''Test posts are displayed when the user is signed out'''
-
+        self.selenium.get(f'{self.live_server_url}/') 
+        
         # Sign in
         self.sign_in()
 
@@ -177,21 +177,25 @@ class MySeleniumTests(StaticLiveServerTestCase):
         self.selenium.find_element(By.ID, 'all-posts').click()
         posts = self.selenium.find_elements(By.CLASS_NAME, 'post')
 
-    # # Test post complete (poster username, post content, timestamp, number of likes)
-    # def test_post_complete(self):
-    #     '''Test a post contains the poster username, the post's content, its timestamp, number of likes it has'''
-    #     self.selenium.get(f'{self.live_server_url}/') 
-    #     self.sign_in()
-    #     self.add_posts(1)       
-    #     post = self.selenium.find_element(By.CLASS_NAME, 'post') 
+    # Test post complete (poster username, post content, timestamp, number of likes)
+    def test_post_complete(self):
+        '''Test a post contains the poster username, the post's content, its timestamp, number of likes it has'''
+        self.selenium.get(f'{self.live_server_url}/') 
+        self.sign_in()
+        self.add_posts(1)       
+        post = self.selenium.find_element(By.CLASS_NAME, 'post') 
 
-    #     # Test poster username
+        # Test poster username
+        self.selenium.find_element(By.CLASS_NAME, 'post-username') 
 
-    #     # Test post content
+        # Test post content
+        self.selenium.find_element(By.CLASS_NAME, 'post-text') 
 
-    #     # Test post timestamp
+        # Test post timestamp
+        self.selenium.find_element(By.CLASS_NAME, 'post-timestamp') 
 
-    #     # Test post likes
+        # Test post likes
+        self.selenium.find_element(By.CLASS_NAME, 'post-likes') 
 
     # # # Test both buttons appear only where apropriate
     # # def test_previous_button_where_appropriate(self):
