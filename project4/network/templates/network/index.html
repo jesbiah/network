@@ -1,21 +1,34 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-    <div class="container"> 
-        <h1>All Posts</h1>    
-        {% if user.is_authenticated %}   
-            <div class="border p-4">
-                <form id="new-post-form" method="post">
-                    {% csrf_token %}
-                    <div class="form-field mb-2">
-                        <label for="new-post" class="">New Post</label>
-                        <textarea class="form-control" id="new-post" rows="3"></textarea>
-                        <div class="form-text" id="new-post-message"></div>
-                    </div>
-                    <button class="theme-primary btn-solid btn-styled" id="submit-new-post" type="submit">Post</button>
-                </form>
-            </div>
-        {% endif %}
+    <div id="all-posts-div">
+        <div class="container"> 
+            <h1>All Posts</h1>    
+            {% if user.is_authenticated %}   
+                <div class="border p-4">
+                    <form id="new-post-form" method="post">
+                        {% csrf_token %}
+                        <div class="form-field mb-2">
+                            <label for="new-post" class="">New Post</label>
+                            <textarea class="form-control" id="new-post" rows="3"></textarea>
+                            <div class="form-text" id="new-post-message"></div>
+                        </div>
+                        <button class="theme-primary btn-solid btn-styled" id="submit-new-post" type="submit">Post</button>
+                    </form>
+                </div>
+            {% endif %}
+        </div>
+        <div class="container" id="posts"></div>
     </div>
-    <div class="container" id="posts"></div>
+    <div class="container" id="profile">
+        <div class="container"> 
+            <h1 id="profile-username"></h1>  
+            <div id="followers"></div> 
+            <div id="following"></div>
+            {% if user.is_authenticated %}   
+                <button class="theme-primary btn-solid btn-styled" id="follow-button" type="submit"></button>
+            {% endif %}
+        </div>
+        <div class="container" id="profile-posts"></div>
+    </div>
 {% endblock %}

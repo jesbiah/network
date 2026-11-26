@@ -62,8 +62,55 @@ function addNewPost() {
         });
 }
 
+function loadProfile(username) {
+
+    // Hide other divs and display profile div
+    console.log(`document.querySelector('#all-posts'): ${document.querySelector('#all-posts')}`);
+    console.log(`document.querySelector('#all-posts').tagName: ${document.querySelector('#all-posts').tagName}`);
+    console.log(`typeof document: ${typeof document}`);
+    document.querySelector('#all-posts-div').style.display = 'none';
+    document.querySelector('#profile').style.display = 'block';
+
+    console.log(`FETCHING PROFILE: ${username}`)
+    fetch(`/profile/${username}`)
+        .then(response => response.json())
+        .then(data => {
+            document.querySelector('#profile-username').innerHTML = data.username;
+
+            // Display the number of followers the user has,
+            document.querySelector('#followers').innerHTML = `${data.followers} follower(s)`;
+
+            // as well as the number of people that the user follows.
+            document.querySelector('#following').innerHTML = `Following ${data.following}`;
+            
+            // Display all of the posts for that user, in reverse chronological order.
+            // Clear posts
+            document.querySelector('#profile-posts').innerHTML = ''
+
+            // Add div for each post
+            data.posts.forEach(function(post) {
+                addPost(post, 'profile-posts');
+            });
+
+            // For any other user who is signed in, this page should also display a “Follow” or “Unfollow” button that will let the current user toggle whether or not they are following this user’s posts. 
+            // Note that this only applies to any “other” user: a user should not be able to follow themselves.
+            // If user signed in - handled by template
+                // If profile not user's
+                if (data.username !== data.visitor){
+                    
+                    // If user not following profile
+                        // Button to follow 
+                    // Else button to unfollow
+                    document.querySelector('#follow-button').innerHTML = !data.is_following ? 'Follow' : 'Unfollow';
+                    }
+            // Else don't display button
+            
+        })
+        .catch();
+}
+
 // Add a new post with given contents to DOM
-function addPost(contents) {
+function addPost(contents, div) {
 
     // Create new post
     const post = document.createElement('div');
@@ -77,14 +124,23 @@ function addPost(contents) {
         </div>
         </div>`;
 
+    // Add link to poster's profile
+    const username = post.querySelector('.post-username');
+    username.addEventListener('click', function(event) {
+        console.log('clicked!');
+        loadProfile(username.innerHTML);
+    });
+
     // Add post to DOM
-    document.querySelector('#posts').append(post);
+    document.querySelector(`#${div}`).append(post);
 };
 
 function fetchPosts() {
     console.log('fetchPosts is running')
 
     // Show all posts div and hide the other views
+    document.querySelector('#all-posts').style.display = 'block';
+    document.querySelector('#profile').style.display = 'none';
 
     if (document.querySelector('#new-post-message')) {
         let message = document.querySelector('#new-post-message');
@@ -98,6 +154,7 @@ function fetchPosts() {
     counter = end + 1;
 
     // Fetch posts
+    console.log(`FETCHING POSTS ${start} to ${end}`)
     fetch(`/posts?start=${start}&end=${end}`)
         .then(response => response.json())
         .then(data => {
@@ -107,8 +164,10 @@ function fetchPosts() {
             // Clear posts
             document.querySelector('#posts').innerHTML = ''
 
-            // Add div for each post
-            data.posts.forEach(addPost);
+            // Add div for each post 
+            data.posts.forEach(function(post) {
+                addPost(post, 'posts');
+            });
         })
         .catch(error => {
             console.log(error);

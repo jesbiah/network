@@ -86,6 +86,25 @@ def posts(request):
         })
 
 
+def profile(request, username):
+    user = User.objects.get(username=username)
+    if not user:
+        return JsonResponse({
+            'error': 'User not found'
+        })
+    
+    print(user.followers)
+
+    return JsonResponse({
+        'followers': user.followers.count(),
+        'following': user.following.count(),
+        'is_following': request.user in user.followers.all(),
+        'posts': [post.dictify() for post in sorted(user.posts.all(), key= lambda post: post.timestamp, reverse=True)],
+        'username': username,
+        'visitor': request.user.username
+    })
+
+
 def register(request):
     if request.method == "POST":
         username = request.POST["username"]
