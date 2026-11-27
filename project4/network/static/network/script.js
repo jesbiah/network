@@ -101,10 +101,12 @@ function loadProfile(username) {
                     // If user not following profile
                         // Button to follow 
                     // Else button to unfollow
-                    document.querySelector('#follow-button').innerHTML = !data.is_following ? 'Follow' : 'Unfollow';
+                    followButton = document.querySelector('#follow-button');
+                    followButton.innerHTML = !data.is_following ? 'Follow' : 'Unfollow';
+                    followButton.style.display = 'inline-block';
                     }
             // Else don't display button
-            
+            document.querySelector('#follow-button').style.display = 'none'          ;
         })
         .catch();
 }

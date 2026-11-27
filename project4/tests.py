@@ -232,10 +232,16 @@ class MySeleniumTests(StaticLiveServerTestCase):
         self.selenium.find_element(By.ID, 'following').text
         self.selenium.find_element(By.CSS_SELECTOR, '#profile-posts > .post')
 
-    # # Test correct profile loaded
-    # def test_correct_profile_loaded(self):
-    #     '''Test the correct user's profile is loaded'''
-    #     pass
+    # Test correct profile loaded
+    def test_correct_profile_loaded(self):
+        '''Test the correct user's profile is loaded'''
+        self.selenium.get(f'{self.live_server_url}/')
+        self.sign_in()
+        self.add_posts(1)
+        username_div = self.selenium.find_element(By.CLASS_NAME, 'post-username')
+        username = username_div.text
+        username_div.click()
+        self.assertEqual(username, self.selenium.find_element(By.ID, 'profile-username').text)
 
     # # Test other views hidden (display: none)
     # def test_other_views_hidden(self):
