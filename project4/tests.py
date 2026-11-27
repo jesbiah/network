@@ -60,6 +60,13 @@ class MySeleniumTests(StaticLiveServerTestCase):
         self.selenium.find_element(By.ID, 'password').send_keys('quartz-falcon-cobalt-amber-88')
         self.selenium.find_element(By.ID, 'submit').click()
 
+    def sign_in_as_other(self):
+        '''Sign in as a different user from the default'''
+        self.selenium.find_element(By.ID, 'login').click()
+        self.selenium.find_element(By.ID, 'username').send_keys('kika')
+        self.selenium.find_element(By.ID, 'password').send_keys('4Madaria1')
+        self.selenium.find_element(By.ID, 'submit').click()
+
     def sign_out(self):
         '''Sign out'''
         self.selenium.find_element(By.ID, 'logout').click()
@@ -204,6 +211,65 @@ class MySeleniumTests(StaticLiveServerTestCase):
 
         # Test post likes
         self.selenium.find_element(By.CLASS_NAME, 'post-likes') 
+
+    # Test clicking username loads profile
+    def test_clicking_username_loads_profile(self):
+        '''Test clicking on a username loads profile'''
+        self.selenium.get(f'{self.live_server_url}/')
+
+        # Sign in and add a post
+        self.sign_in()
+        self.add_posts(1)
+        
+        # Select a username
+        # Click on it
+        self.selenium.find_element(By.CLASS_NAME, 'post-username').click()
+
+        time.sleep(2)
+
+        # Check for number of followers, number of people following and posts in reverse chronological order
+        self.selenium.find_element(By.ID, 'followers').text
+        self.selenium.find_element(By.ID, 'following').text
+        self.selenium.find_element(By.CSS_SELECTOR, '#profile-posts > .post')
+
+    # # Test correct profile loaded
+    # def test_correct_profile_loaded(self):
+    #     '''Test the correct user's profile is loaded'''
+    #     pass
+
+    # # Test other views hidden (display: none)
+    # def test_other_views_hidden(self):
+    #     '''Test views other than the profile are not visible'''
+    #     pass
+
+    # # Test profile div visible (block)
+    # def test_profile_div_visible(self):
+    #     '''Test the profile div is visible'''
+    #     pass
+
+    # # Test username matches link (add link with javascript history api)
+    # def test_username_matches_link(self):
+    #     '''Test the username matches the link in the address bar'''
+    #     pass
+
+    # # Test button visible only when signed in
+    # def test_button_visible_when_signed_in(self):
+    #     '''Test the 'Follow'/'Unfollow' button is visible when signed in'''
+    #     pass
+
+    # def test_button_not_visible_when_not_signed_in(self):
+    #     '''Test the 'Follow'/'Unfollow' button does not appear when signed out'''
+    #     pass
+
+    # # Test button shows 'Follow' if not following
+    # def test_button_shows_follow_if_not_following(self):
+    #     '''Test the 'Follow'/'Unfollow' button shows 'Follow' when not following profile'''
+    #     pass
+
+    # # Test button shows 'Unfollow' if following
+    # def test_button_shows_unfollow_if_following(self):
+    #     '''Test the 'Follow'/'Unfollow' button shows 'Unfollow' when following profile'''
+    #     pass
 
     # # # Test both buttons appear only where apropriate
     # # def test_previous_button_where_appropriate(self):

@@ -78,10 +78,10 @@ function loadProfile(username) {
             document.querySelector('#profile-username').innerHTML = data.username;
 
             // Display the number of followers the user has,
-            document.querySelector('#followers').innerHTML = `${data.followers} follower(s)`;
+            document.querySelector('#followers').innerHTML = `Followers: ${data.followers}`;
 
             // as well as the number of people that the user follows.
-            document.querySelector('#following').innerHTML = `Following ${data.following}`;
+            document.querySelector('#following').innerHTML = `Following: ${data.following}`;
             
             // Display all of the posts for that user, in reverse chronological order.
             // Clear posts

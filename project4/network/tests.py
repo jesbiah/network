@@ -43,3 +43,21 @@ class NetworkTestCase(TestCase):
         self.sign_in(c)
         response = c.get(f'/posts?start={start}&end={end}')
 
+    # Test all posts by user
+    def test_all_posts_are_by_user(self):
+        '''Tests all the displayed posts are by the user whose profile is displayed'''
+        pass
+
+    # Test posts displayed/'No posts yet'
+    def test_posts_displayed(self):
+        '''Test posts are displayed on profile page'''
+        pass
+
+    def test_no_posts_yet_message_when_no_posts(self):
+        '''Test 'No posts yet' is  displayed when there are no posts by the user'''
+        pass
+
+    # Test all posts loaded
+    def test_all_post_loaded(self):
+        '''Test all the posts by that user are displayed'''
+        pass

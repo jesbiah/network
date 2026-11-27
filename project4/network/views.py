@@ -92,8 +92,6 @@ def profile(request, username):
         return JsonResponse({
             'error': 'User not found'
         })
-    
-    print(user.followers)
 
     return JsonResponse({
         'followers': user.followers.count(),
