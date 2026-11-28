@@ -22,6 +22,7 @@ Command Palette (Ctrl+Shift+P) → "Save with Encoding" → choose UTF-8 (not "U
 class MySeleniumTests(StaticLiveServerTestCase):
     fixtures = ['user-data.json']
 
+    page_views = ['all-posts-div', 'profile']
     post_text = 'Typing new post'
     username = 'user'
 
@@ -246,7 +247,20 @@ class MySeleniumTests(StaticLiveServerTestCase):
     # # Test other views hidden (display: none)
     # def test_other_views_hidden(self):
     #     '''Test views other than the profile are not visible'''
-    #     pass
+    #     self.selenium.get(f'{self.live_server_url}/')
+    #     self.sign_in()
+    #     self.add_posts(1)
+
+    #     current_view = 'profile'
+    #     for view in self.page_views:
+    #         if view != current_view:
+
+    #             # Assert view not visible
+    #             print(dir(self.selenium.find_element(By.ID, view)))
+    #             print(self.selenium.find_element(By.ID, view).accessible_name)
+    #             print(f'View [{self.selenium.find_element(By.ID, view)}] has display:')
+    #             print(self.selenium.find_element(By.ID, view).value_of_css_property('display'))
+    #             self.assertEqual(self.selenium.find_element(By.ID, view).value_of_css_property('display'), 'none')
 
     # # Test profile div visible (block)
     # def test_profile_div_visible(self):

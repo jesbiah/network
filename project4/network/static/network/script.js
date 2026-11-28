@@ -18,6 +18,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
 })
 
+window.onpopstate = function(event) {
+    if (!event.state) {
+        fetchPosts();
+    }
+    else if (event.state.page === 'profile') {
+        console.log(`event.state.page: ${event.state.page}`);
+        console.log(`event.state.username: ${event.state.username}`);
+        loadProfile(event.state.username);
+    }
+}
+
 // Add new post
 function addNewPost() {
     
@@ -65,9 +76,6 @@ function addNewPost() {
 function loadProfile(username) {
 
     // Hide other divs and display profile div
-    console.log(`document.querySelector('#all-posts'): ${document.querySelector('#all-posts')}`);
-    console.log(`document.querySelector('#all-posts').tagName: ${document.querySelector('#all-posts').tagName}`);
-    console.log(`typeof document: ${typeof document}`);
     document.querySelector('#all-posts-div').style.display = 'none';
     document.querySelector('#profile').style.display = 'block';
 
@@ -94,7 +102,8 @@ function loadProfile(username) {
 
             // For any other user who is signed in, this page should also display a “Follow” or “Unfollow” button that will let the current user toggle whether or not they are following this user’s posts. 
             // Note that this only applies to any “other” user: a user should not be able to follow themselves.
-            // If user signed in - handled by template
+            // If user signed in
+            if (document.querySelector('#logout')){
                 // If profile not user's
                 if (data.username !== data.visitor){
                     
@@ -104,9 +113,12 @@ function loadProfile(username) {
                     followButton = document.querySelector('#follow-button');
                     followButton.innerHTML = !data.is_following ? 'Follow' : 'Unfollow';
                     followButton.style.display = 'inline-block';
-                    }
-            // Else don't display button
-            document.querySelector('#follow-button').style.display = 'none'          ;
+                }
+                // Else don't display button
+                else {
+                    document.querySelector('#follow-button').style.display = 'none';
+                }
+            }            
         })
         .catch();
 }
@@ -129,8 +141,8 @@ function addPost(contents, div) {
     // Add link to poster's profile
     const username = post.querySelector('.post-username');
     username.addEventListener('click', function(event) {
-        console.log('clicked!');
-        loadProfile(username.innerHTML);
+        history.pushState({page: 'profile', username: username.text}, '', `${contents.poster}`)
+        loadProfile(contents.poster);
     });
 
     // Add post to DOM
@@ -141,7 +153,7 @@ function fetchPosts() {
     console.log('fetchPosts is running')
 
     // Show all posts div and hide the other views
-    document.querySelector('#all-posts').style.display = 'block';
+    document.querySelector('#all-posts-div').style.display = 'block';
     document.querySelector('#profile').style.display = 'none';
 
     if (document.querySelector('#new-post-message')) {
@@ -153,7 +165,7 @@ function fetchPosts() {
     // Set start and end post numbers, and update counter
     const start = counter;
     const end = start + quantity - 1;
-    counter = end + 1;
+    // counter = end + 1;
 
     // Fetch posts
     console.log(`FETCHING POSTS ${start} to ${end}`)
