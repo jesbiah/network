@@ -259,10 +259,16 @@ class MySeleniumTests(StaticLiveServerTestCase):
                 # Assert view not visible
                 self.assertEqual(self.selenium.find_element(By.ID, view).value_of_css_property('display'), 'none')
 
-    # # Test profile div visible (block)
-    # def test_profile_div_visible(self):
-    #     '''Test the profile div is visible'''
-    #     pass
+    # Test profile div visible (block)
+    def test_profile_div_visible(self):
+        '''Test the profile div is visible'''
+        self.selenium.get(f'{self.live_server_url}/')
+        self.sign_in()
+        self.add_posts(1)
+        self.selenium.find_element(By.CLASS_NAME, 'post-username').click()
+
+        current_view = 'profile'
+        self.assertEqual(self.selenium.find_element(By.ID, current_view).value_of_css_property('display'), 'block')
 
     # # Test username matches link (add link with javascript history api)
     # def test_username_matches_link(self):
