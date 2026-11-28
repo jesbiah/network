@@ -258,7 +258,6 @@ class MySeleniumTests(StaticLiveServerTestCase):
     def test_profile_div_visible(self):
         '''Test the profile div is visible'''
         self.load_profile()
-
         current_view = 'profile'
         self.assertEqual(self.selenium.find_element(By.ID, current_view).value_of_css_property('display'), 'block')
 
@@ -266,6 +265,9 @@ class MySeleniumTests(StaticLiveServerTestCase):
     def test_username_matches_link(self):
         '''Test the username matches the link in the address bar'''
         self.load_profile()
+        username = self.selenium.find_element(By.ID, 'profile-username').text
+        url_suffix = self.selenium.current_url.split('/')[-1]
+        self.assertEqual(url_suffix, username)
 
     # # Test button visible only when signed in
     # def test_button_visible_when_signed_in(self):
