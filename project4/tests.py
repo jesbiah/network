@@ -54,10 +54,10 @@ class MySeleniumTests(StaticLiveServerTestCase):
             new_post.send_keys(self.post_text)
             submit_new_post.click()
 
-    def load_profile(self):
+    def load_profile(self, n=1):
         '''Sign in, add a post and click on the username on that post to load profile'''
         self.sign_in()
-        self.add_posts(1)
+        self.add_posts(n)
         self.selenium.find_element(By.CLASS_NAME, 'post-username').click()
 
     def sign_in(self):
@@ -268,6 +268,14 @@ class MySeleniumTests(StaticLiveServerTestCase):
         username = self.selenium.find_element(By.ID, 'profile-username').text
         url_suffix = self.selenium.current_url.split('/')[-1]
         self.assertEqual(url_suffix, username)
+
+    def test_all_posts_by_user(self):
+        '''Test all visible posts by the user whose profile is displayed'''
+        self.load_profile(5)
+        posts = self.selenium.find_elements(By.CLASS_NAME, 'post')
+        username = self.selenium.find_element(By.ID, 'profile-username').text
+        for post in posts:
+            self.assertEqual(username, post.find_element(By.CLASS_NAME, 'post-username').text)
 
     # # Test button visible only when signed in
     # def test_button_visible_when_signed_in(self):

@@ -1,5 +1,6 @@
 // To batch posts
 let counter = 1;
+var pageViews = ['all-posts-div', 'profile'];
 const quantity = 10;
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -73,13 +74,24 @@ function addNewPost() {
         });
 }
 
+function displayPage(page) {
+    for (let pageView of pageViews) {
+        let view = document.querySelector(`#${pageView}`)
+        if (pageView === page) {
+            view.style.display = 'block';
+        }
+        else {
+            view.innerHTML = '';
+            view.style.display = 'none';
+        }
+    }
+}
+
 function loadProfile(username) {
 
     // Hide other divs and display profile div
-    document.querySelector('#all-posts-div').style.display = 'none';
-    document.querySelector('#profile').style.display = 'block';
+    displayPage('profile');
 
-    console.log(`FETCHING PROFILE: ${username}`)
     fetch(`/profile/${username}`)
         .then(response => response.json())
         .then(data => {
@@ -150,7 +162,6 @@ function addPost(contents, div) {
 };
 
 function fetchPosts() {
-    console.log('fetchPosts is running')
 
     // Show all posts div and hide the other views
     document.querySelector('#all-posts-div').style.display = 'block';
