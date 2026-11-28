@@ -47,14 +47,22 @@ class MySeleniumTests(StaticLiveServerTestCase):
         super().tearDownClass
 
     def add_posts(self, n):
+        '''Add n posts by the same user'''
         new_post = self.selenium.find_element(By.ID, 'new-post')
         submit_new_post = self.selenium.find_element(By.ID, 'submit-new-post')
         for _ in range(n):
             new_post.send_keys(self.post_text)
             submit_new_post.click()
 
+    def load_profile(self):
+        '''Sign in, add a post and click on the username on that post to load profile'''
+        self.sign_in()
+        self.add_posts(1)
+        self.selenium.find_element(By.CLASS_NAME, 'post-username').click()
+
     def sign_in(self):
         '''Sign in'''
+        self.selenium.get(f'{self.live_server_url}/')
         self.selenium.find_element(By.ID, 'login').click()
         
         self.selenium.find_element(By.ID, 'username').send_keys(self.username)
@@ -63,6 +71,7 @@ class MySeleniumTests(StaticLiveServerTestCase):
 
     def sign_in_as_other(self):
         '''Sign in as a different user from the default'''
+        self.selenium.get(f'{self.live_server_url}/')
         self.selenium.find_element(By.ID, 'login').click()
         self.selenium.find_element(By.ID, 'username').send_keys('kika')
         self.selenium.find_element(By.ID, 'password').send_keys('4Madaria1')
@@ -85,7 +94,6 @@ class MySeleniumTests(StaticLiveServerTestCase):
 
     def test_new_post_form_when_signed_in(self):
         '''Make sure new post form is rendered when signed in'''
-        self.selenium.get(f'{self.live_server_url}/')
         self.sign_in()
 
         # Check form
@@ -108,7 +116,6 @@ class MySeleniumTests(StaticLiveServerTestCase):
     # Prevent default
     def test_prevent_default(self):
         '''Test page doesn't refresh when new post submitted'''
-        self.selenium.get(f'{self.live_server_url}/')
         self.sign_in()
         
         # Select an element before refreshing
@@ -121,7 +128,6 @@ class MySeleniumTests(StaticLiveServerTestCase):
     # Error caught
     def test_blank_post_error_caught(self):
         '''Test error message from API endpoint handled'''
-        self.selenium.get(f'{self.live_server_url}/') 
         self.sign_in()
         
         post = self.selenium.find_element(By.ID, 'new-post')
@@ -135,7 +141,6 @@ class MySeleniumTests(StaticLiveServerTestCase):
     # AJAX sent
     def test_new_post_ajax(self):
         '''Test AJAX request sent when new post added'''
-        self.selenium.get(f'{self.live_server_url}/') 
         self.sign_in()
 
         # Add post
@@ -148,7 +153,6 @@ class MySeleniumTests(StaticLiveServerTestCase):
     # Test posts loaded
     def test_posts_loaded(self):
         '''Test posts have been loaded'''
-        self.selenium.get(f'{self.live_server_url}/') 
         self.sign_in()
         self.add_posts(1)
         self.selenium.find_element(By.CLASS_NAME, 'post') 
@@ -156,7 +160,6 @@ class MySeleniumTests(StaticLiveServerTestCase):
     # Test display all posts when signed out
     def test_posts_displayed_signed_out(self):
         '''Test posts are displayed when the user is signed out'''
-        self.selenium.get(f'{self.live_server_url}/') 
         
         # Sign in
         self.sign_in()
@@ -173,7 +176,6 @@ class MySeleniumTests(StaticLiveServerTestCase):
     # Test posts in reverse-chronological order
     def test_posts_in_reverse_chronological_order(self):
         '''Test the posts appear in reverse chronological order'''
-        self.selenium.get(f'{self.live_server_url}/') 
         self.sign_in()
 
         # Add posts a minute apart
@@ -187,7 +189,6 @@ class MySeleniumTests(StaticLiveServerTestCase):
     # Test 'all posts' link leads to list of posts
     def test_all_posts_link(self):
         '''Test the 'All Posts' link leads to the list of posts'''
-        self.selenium.get(f'{self.live_server_url}/') 
         self.sign_in()
         self.add_posts(3)
         self.selenium.find_element(By.ID, 'all-posts').click()
@@ -196,7 +197,6 @@ class MySeleniumTests(StaticLiveServerTestCase):
     # Test post complete (poster username, post content, timestamp, number of likes)
     def test_post_complete(self):
         '''Test a post contains the poster username, the post's content, its timestamp, number of likes it has'''
-        self.selenium.get(f'{self.live_server_url}/') 
         self.sign_in()
         self.add_posts(1)       
         post = self.selenium.find_element(By.CLASS_NAME, 'post') 
@@ -216,7 +216,6 @@ class MySeleniumTests(StaticLiveServerTestCase):
     # Test clicking username loads profile
     def test_clicking_username_loads_profile(self):
         '''Test clicking on a username loads profile'''
-        self.selenium.get(f'{self.live_server_url}/')
 
         # Sign in and add a post
         self.sign_in()
@@ -236,7 +235,6 @@ class MySeleniumTests(StaticLiveServerTestCase):
     # Test correct profile loaded
     def test_correct_profile_loaded(self):
         '''Test the correct user's profile is loaded'''
-        self.selenium.get(f'{self.live_server_url}/')
         self.sign_in()
         self.add_posts(1)
         username_div = self.selenium.find_element(By.CLASS_NAME, 'post-username')
@@ -247,10 +245,7 @@ class MySeleniumTests(StaticLiveServerTestCase):
     # Test other views hidden (display: none)
     def test_other_views_hidden(self):
         '''Test views other than the profile are not visible'''
-        self.selenium.get(f'{self.live_server_url}/')
-        self.sign_in()
-        self.add_posts(1)
-        self.selenium.find_element(By.CLASS_NAME, 'post-username').click()
+        self.load_profile()
 
         current_view = 'profile'
         for view in self.page_views:
@@ -262,18 +257,15 @@ class MySeleniumTests(StaticLiveServerTestCase):
     # Test profile div visible (block)
     def test_profile_div_visible(self):
         '''Test the profile div is visible'''
-        self.selenium.get(f'{self.live_server_url}/')
-        self.sign_in()
-        self.add_posts(1)
-        self.selenium.find_element(By.CLASS_NAME, 'post-username').click()
+        self.load_profile()
 
         current_view = 'profile'
         self.assertEqual(self.selenium.find_element(By.ID, current_view).value_of_css_property('display'), 'block')
 
-    # # Test username matches link (add link with javascript history api)
-    # def test_username_matches_link(self):
-    #     '''Test the username matches the link in the address bar'''
-    #     pass
+    # Test username matches link (add link with javascript history api)
+    def test_username_matches_link(self):
+        '''Test the username matches the link in the address bar'''
+        self.load_profile()
 
     # # Test button visible only when signed in
     # def test_button_visible_when_signed_in(self):
